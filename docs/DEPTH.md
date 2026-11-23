@@ -27,5 +27,8 @@
 | TRAP-19 | 专属和公开同日适用 | 高修订公开版覆盖专属 | 先比较授权范围 | `app/licenses/terms.py` | `tests/test_licenses.py::test_special_beats_public_high_revision` |
 | TRAP-23 | 请求在截止日 | 到期条款多算一天 | 左闭右开 | `app/licenses/terms.py` | `tests/test_licenses.py::test_closed_at_valid_until` |
 | TRAP-25 | 两版时间重叠 | 按列表顺序选版 | 高修订优先，同级冲突待证 | `app/licenses/decide.py` | `tests/test_licenses.py::test_overlapping_versions_and_tie` |
+| TRAP-31 | 误撤后额度已签给同卷后单 | 全数恢复挤掉后单或死等额度 | 按当前可用额度逐页恢复，低页优先，余页等额度 | `app/pagination/ledger.py` | `tests/test_restorations.py::test_partial_restore_takes_lowest_pages_and_keeps_rest_waiting` |
+| TRAP-32 | 更正补签原本没签下的页 | 恢复范围放大到整段申请 | 只在原实签页段 `granted` 内恢复 | `app/pagination/ledger.py` | `tests/test_restorations.py::test_restore_cannot_backfill_pages_never_signed` |
+| TRAP-33 | 并发/重试同一更正 | 同一页恢复两次、重复扣页 | 内容寻址 + 唯一约束只落一卷，重复更正判 `REPEATED_RESTORE` | `app/vault/record.py` `app/pagination/ledger.py` | `tests/test_restorations.py::test_concurrent_correction_deposits_commit_once` |
 
 58 申请页 = 32 许可页 + 18 拒绝页 + 8 待证页。C01 已许可 6 页，R01 归还 6 页，因此有效占用 26 页。申请页计在订单内部去重，各不同订单独立计数。

@@ -10,7 +10,8 @@ def stamp(vault, run):
     stages = report['stages']
     document = {'document':'馆际复制签发凭证','manifest':report['manifest'],
                 'accounting':stages['balance'],'requests':stages['pages']['copies'],
-                'revocations':stages['pages']['reversals'],'isolated':stages['intake']['exceptions'],
+                'revocations':stages['pages']['reversals'],'restorations':stages['pages']['corrections'],
+                'isolated':stages['intake']['exceptions'],
                 'suppressions':stages['intake']['duplicates'],'resolutions':stages['licenses']['verdicts']}
     body = encode(document)
     imprint = sha256(body.encode()).hexdigest()

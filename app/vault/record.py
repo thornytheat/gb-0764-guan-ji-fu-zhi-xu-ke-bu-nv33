@@ -22,7 +22,8 @@ def deposit(vault, raw):
     run = sha256(encode(identity).encode()).hexdigest()
     manifest = dict(identity,run_id=run,received_at=datetime.now(timezone.utc).isoformat(),
                     elapsed_ms=int(1000*(perf_counter()-begin)), totals={key:report['balance'][key]
-                              for key in ('requested','licensed','denied','pending','restored','effective')})
+                              for key in ('requested','licensed','denied','pending','restored',
+                                          'recovered','awaiting_quota','effective')})
     with vault.session() as conn:
         saved = conn.execute('INSERT INTO volumes VALUES (?,?,?) ON CONFLICT(id) DO NOTHING',
                              (run,encode(manifest),encode(report))).rowcount

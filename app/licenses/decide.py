@@ -6,7 +6,7 @@ def decide(mapped, terms):
     for row in mapped:
         valid = []
         chosen = None
-        if row['action'] == 'cancel':
+        if row['action'] in ('cancel','restore'):
             reason = row['reasons'][0]['code'] if row['reasons'] else None
         elif row['reasons']:
             reason = row['reasons'][0]['code']

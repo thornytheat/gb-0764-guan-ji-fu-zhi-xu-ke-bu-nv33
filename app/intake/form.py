@@ -15,14 +15,17 @@ def order(line, row):
         received = date.fromisoformat(row['received']).isoformat()
         if received != row['received']:
             raise ValueError
-        if row['action'] == 'copy':
+        elif row['action'] == 'copy':
             if row['target'] or len(row['pages']) > 512 or not PAGE_SYNTAX.fullmatch(row['pages']):
                 raise ValueError
             for span in row['pages'].split(';'):
                 ends = [int(number) for number in span.split('-')]
                 if ends[0] > ends[-1]:
                     raise ValueError
-        elif row['action'] != 'cancel' or row['issn'] or row['pages']:
+        elif row['action'] in ('cancel','restore'):
+            if row['issn'] or row['pages']:
+                raise ValueError
+        else:
             raise ValueError
     except ValueError as exc:
         raise ValueError('INVALID') from exc
